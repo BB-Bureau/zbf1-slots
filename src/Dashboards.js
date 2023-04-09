@@ -108,15 +108,15 @@ export default function Dashboard(props) {
       {localKP?.publicKey && <div>lkp: {localKP.publicKey.toString()}</div>}
       <div>Sol balance lkp: {solBalanceLocalKp}</div>
       <div>HMB balance lkp: {hmbBalanceLocalKp}</div>
-      {(hmbBalanceLocalKp === 0 || solBalanceLocalKp === 0) && (
         <button onClick={topup}>topup</button>
-      )}
       {hmbBalanceLocalKp !== 0 && solBalanceLocalKp !== 0 && (
         <button onClick={claimAndClose}> claim and close</button>
       )}
       <br />
       <br />
       <Slot
+      topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+      topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame1"}
         wallet={wallet}
@@ -125,6 +125,8 @@ export default function Dashboard(props) {
       <br />
       <br />
       <Slot
+        topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+        topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame2"}
         wallet={wallet}
@@ -133,6 +135,8 @@ export default function Dashboard(props) {
       <br />
       <br />
       <Slot
+      topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+      topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame3"}
         wallet={wallet}
@@ -141,6 +145,8 @@ export default function Dashboard(props) {
       <br />
       <br />
       <Slot
+      topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+      topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame4"}
         wallet={wallet}
@@ -150,7 +156,7 @@ export default function Dashboard(props) {
   );
 }
 
-function Slot({ refreshAll, wallet, localKP, seed }) {
+function Slot({ refreshAll, wallet, localKP, seed, topupRequired, topup }) {
   const [spinning, setSpinning] = useState(false);
   const [lastResult, setLastResult] = useState();
   const [targetCombination, setTargetCombination] = useState(
@@ -229,8 +235,13 @@ function Slot({ refreshAll, wallet, localKP, seed }) {
   return (
     <div style={{ margin: "auto", maxWidth: "500px" }}>
       <div style={{ display: "flex" }}>
+        {!topupRequired && <>
         {spinning && <div>spinning...</div>}
         {!spinning && <button style={{borderRadius:"40px", padding: "10px"} } onClick={startSpinWithLkp}> play 10</button>}
+        </>}
+        {topupRequired && <>
+          <button style={{borderRadius:"40px", padding: "10px"} } onClick={topup}> Top Up</button>
+        </>}
         {targetCombination.map((s, idx) => (
           <div key={idx} style={{ padding: "3px", fontSize: "50px" }}>
             {s.v}
