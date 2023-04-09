@@ -27,7 +27,7 @@ export const getHmbBalance = async (wallet) => {
     return {value:{
       amount: 0,
       decimals: 9,
-      uiAmount: "You don't have any HMB, buy some to play",
+      uiAmount: 0,
       uiAmountString: 0,
     }};
   }
