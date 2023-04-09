@@ -31,7 +31,6 @@ export const topupHmbAndSol = async (localKp, wallet, hmb, sol) => {
     collateralMintPk,
     localKp.publicKey
   );
-debugger
   try {
     await getAccount(
       program.provider.connection,

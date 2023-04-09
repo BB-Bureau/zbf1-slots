@@ -74,7 +74,7 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     let serializedKeypair;
-    serializedKeypair = localStorage.getItem("solanaKeypair");
+    serializedKeypair = localStorage.getItem("hmbKp");
     if (!serializedKeypair) {
       const keypair = Keypair.generate();
       serializedKeypair = JSON.stringify({
