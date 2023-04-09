@@ -108,15 +108,15 @@ export default function Dashboard(props) {
       {localKP?.publicKey && <div>lkp: {localKP.publicKey.toString()}</div>}
       <div>Sol balance lkp: {solBalanceLocalKp}</div>
       <div>HMB balance lkp: {hmbBalanceLocalKp}</div>
-        <button onClick={topup}>topup</button>
+      <button onClick={topup}>topup</button>
       {hmbBalanceLocalKp !== 0 && solBalanceLocalKp !== 0 && (
         <button onClick={claimAndClose}> claim and close</button>
       )}
       <br />
       <br />
       <Slot
-      topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
-      topup={topup}
+        topupNotRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+        topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame1"}
         wallet={wallet}
@@ -125,7 +125,7 @@ export default function Dashboard(props) {
       <br />
       <br />
       <Slot
-        topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+        topupNotRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
         topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame2"}
@@ -135,8 +135,8 @@ export default function Dashboard(props) {
       <br />
       <br />
       <Slot
-      topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
-      topup={topup}
+        topupNotRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+        topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame3"}
         wallet={wallet}
@@ -145,8 +145,8 @@ export default function Dashboard(props) {
       <br />
       <br />
       <Slot
-      topupRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
-      topup={topup}
+        topupNotRequired={hmbBalanceLocalKp > 100 && solBalanceLocalKp > 0.001}
+        topup={topup}
         refreshAll={refreshAll}
         seed={"rndgame4"}
         wallet={wallet}
@@ -156,13 +156,13 @@ export default function Dashboard(props) {
   );
 }
 
-function Slot({ refreshAll, wallet, localKP, seed, topupRequired, topup }) {
+function Slot({ refreshAll, wallet, localKP, seed, topupNotRequired, topup }) {
   const [spinning, setSpinning] = useState(false);
   const [lastResult, setLastResult] = useState();
   const [targetCombination, setTargetCombination] = useState(
     shuffleArray(symbols)
   );
-  console.log({targetCombination})
+  console.log({ targetCombination });
   const startSpinWithLWallet = () => {
     return startSpin(wallet, true, wallet);
   };
@@ -192,36 +192,36 @@ function Slot({ refreshAll, wallet, localKP, seed, topupRequired, topup }) {
       }
       if (result === 1) {
         // win 2 => 3 of the same
-        const newArray = [...shuffleArray(symbols)]
-        newArray[1] = newArray[0]
-        newArray[2] = newArray[0]
+        const newArray = [...shuffleArray(symbols)];
+        newArray[1] = newArray[0];
+        newArray[2] = newArray[0];
         setTargetCombination([...shuffleArray(newArray)]);
       }
       if (result === 2) {
         // win 3 =>  4 of the same
-        const newArray = [...shuffleArray(symbols)]
-        newArray[1] = newArray[0]
-        newArray[2] = newArray[0]
-        newArray[3] = newArray[0]
+        const newArray = [...shuffleArray(symbols)];
+        newArray[1] = newArray[0];
+        newArray[2] = newArray[0];
+        newArray[3] = newArray[0];
         setTargetCombination([...shuffleArray(newArray)]);
       }
       if (result === 4) {
         // win 5 => 5 of the same || 3+3
-        const newArray = [...shuffleArray(symbols)]
-        newArray[1] = newArray[0]
-        newArray[2] = newArray[0]
-        newArray[3] = newArray[0]
-        newArray[4] = newArray[0]
+        const newArray = [...shuffleArray(symbols)];
+        newArray[1] = newArray[0];
+        newArray[2] = newArray[0];
+        newArray[3] = newArray[0];
+        newArray[4] = newArray[0];
         setTargetCombination([...shuffleArray(newArray)]);
       }
       if (result === 9) {
         // win 10 => 6 of the same
-        const newArray = [...shuffleArray(symbols)]
-        newArray[1] = newArray[0]
-        newArray[2] = newArray[0]
-        newArray[3] = newArray[0]
-        newArray[4] = newArray[0]
-        newArray[5] = newArray[0]
+        const newArray = [...shuffleArray(symbols)];
+        newArray[1] = newArray[0];
+        newArray[2] = newArray[0];
+        newArray[3] = newArray[0];
+        newArray[4] = newArray[0];
+        newArray[5] = newArray[0];
         setTargetCombination([...shuffleArray(newArray)]);
       }
       if (postBalance > prevBalance) {
@@ -235,13 +235,31 @@ function Slot({ refreshAll, wallet, localKP, seed, topupRequired, topup }) {
   return (
     <div style={{ margin: "auto", maxWidth: "500px" }}>
       <div style={{ display: "flex" }}>
-        {!topupRequired && <>
-        {spinning && <div>spinning...</div>}
-        {!spinning && <button style={{borderRadius:"40px", padding: "10px"} } onClick={startSpinWithLkp}> play 10</button>}
-        </>}
-        {topupRequired && <>
-          <button style={{borderRadius:"40px", padding: "10px"} } onClick={topup}> Top Up</button>
-        </>}
+        {topupNotRequired && (
+          <>
+            {spinning && <div>spinning...</div>}
+            {!spinning && (
+              <button
+                style={{ borderRadius: "40px", padding: "10px" }}
+                onClick={startSpinWithLkp}
+              >
+                {" "}
+                play 10
+              </button>
+            )}
+          </>
+        )}
+        {!topupNotRequired && (
+          <>
+            <button
+              style={{ borderRadius: "40px", padding: "10px" }}
+              onClick={topup}
+            >
+              {" "}
+              Top Up
+            </button>
+          </>
+        )}
         {targetCombination.map((s, idx) => (
           <div key={idx} style={{ padding: "3px", fontSize: "50px" }}>
             {s.v}
